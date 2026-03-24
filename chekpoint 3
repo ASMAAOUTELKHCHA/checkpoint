@@ -1,1 +1,19 @@
+def calculator(num1,num2):
+    n=input("enter an operator(+,-,*,/)")
+    if n=="+":
+        return(num1+num2)
+    elif n=="-":
+        return(num1-num2)
+    elif n=="*":
+        return(num1*num2)
+    elif n=="/":
+        if num2!=0:
+            return(num1/num2)
+        else : 
+         print("invalid")
+
+numero1=int(input("entrez le premier numero :"))
+numero2=int(input("entrez le deuxieme numero :"))
+
+print(calculator(numero1,numero2))
 
