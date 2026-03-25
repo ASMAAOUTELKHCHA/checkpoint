@@ -1,1 +1,28 @@
+import numpy as np
+grades=np.array([85, 90, 88, 92, 95, 80, 75, 98, 89, 83])
+print(grades)
+moyen=np.mean(grades)
+print(moyen)
+mediane = np.median(grades)
+print(mediane)
+ecart_type = np.std(grades)
+print(ecart_type)
+maximum = np.max(grades)
+print(maximum)
+minimum = np.min(grades)
+print(minimum)
+grades_tries = np.sort(grades)
+print(grades_tries)
+indice_max = np.argmax(grades)
+print(indice_max)
+nb_sup_90 = np.sum(grades > 90)
+print(nb_sup_90)
+pourcentage_sup_90 = np.mean(grades > 90) * 100
+print(pourcentage_sup_90)
+pourcentage_inf_75 = np.mean(grades < 75) * 100
+print(pourcentage_inf_75)
+high_performers = grades[grades > 90]
+print(high_performers)
+passing_grades = grades[grades > 75]
+print(passing_grades)
 
