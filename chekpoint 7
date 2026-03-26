@@ -1,1 +1,85 @@
+import requests
+from bs4 import BeautifulSoup
 
+
+# 1) Get and parse HTML 
+def scrape_wikipedia(url):
+    page = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
+    soup = BeautifulSoup(page.content, "html.parser")
+    return soup
+
+
+# 2) Extract article title
+def extract_title(soup):
+    title = soup.find("h1", id="firstHeading")
+
+    if title:
+        return title.get_text(strip=True)
+    else:
+        return "Title not found"
+
+
+# 3) Extract article text 
+def extract_text_by_headings(soup):
+    content = soup.find("div", class_="mw-parser-output")
+    elements = content.find_all(["h2", "h3", "p"])
+
+    article_data = {}
+
+    current_heading = "Introduction"
+    article_data[current_heading] = []
+
+    for element in elements:
+        if element.name in ["h2", "h3"]:
+            current_heading = element.get_text(strip=True)
+            article_data[current_heading] = []
+
+        elif element.name == "p":
+            paragraph = element.get_text(strip=True)
+            article_data[current_heading].append(paragraph)
+
+    return article_data
+
+
+# 4) Collect internal Wikipedia links
+def extract_internal_links(soup):
+    links = []
+
+    for link in soup.find_all("a", href=True):
+        href = link["href"]
+
+        if href.startswith("/wiki/") and ":" not in href:
+            full_link = "https://af.wikipedia.org" + href
+
+            if full_link not in links:
+                links.append(full_link)
+
+    return links
+
+
+# 5) Wrap everything into one function
+def get_wikipedia_data(url):
+    soup = scrape_wikipedia(url)
+
+    data = {
+        "title": extract_title(soup),
+        "text_by_headings": extract_text_by_headings(soup),
+        "internal_links": extract_internal_links(soup)
+    }
+
+    return data
+
+
+# 6) Test the final function
+url = "https://af.wikipedia.org/wiki/Mohammed"
+
+result = get_wikipedia_data(url)
+
+print("TITLE:")
+print(result["title"])
+
+print("\nTEXT BY HEADINGS:")
+print(result["text_by_headings"])
+
+print("\nFIRST 10 INTERNAL LINKS:")
+print(result["internal_links"][:10])
