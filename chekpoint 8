@@ -1,1 +1,18 @@
+import numpy as np
 
+file=open("C:/Users/DELL/Downloads/Loan_prediction_dataset.csv",'r')
+data=np.genfromtxt(file, delimiter=",", skip_header=1)
+
+Loan_Amount = data[:,8]
+
+
+moyenne=np.nanmean(Loan_Amount )
+print(moyenne)
+
+mediane = np.nanmedian(Loan_Amount )
+print(mediane)
+
+ecart_type = np.nanstd(Loan_Amount )
+print(ecart_type)
+
+file.close()
