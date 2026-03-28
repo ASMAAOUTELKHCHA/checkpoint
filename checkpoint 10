@@ -1,1 +1,85 @@
+# 1 recherche biniare
 
+def binary_search(arr, target):
+    low,high = 0,len(arr) - 1
+
+    while low <= high:
+        mid = (low + high) // 2
+        if arr[mid] == target:
+            return True
+        elif arr[mid] < target:
+            low = mid + 1
+        else:
+            high = mid - 1
+    return False
+
+print(binary_search([1,2,3,5,8], 6))  
+print(binary_search([1,2,3,5,8], 5))  
+
+# 2 calcul de la puissance
+
+def puissance(x, y):
+    result = 1
+    for _ in range(y):
+        result *= x
+    return result
+
+print(puissance(3,4)) 
+
+# 3 tri a bulles
+
+def bubble_sort(arr):
+ n = len(arr)
+ for i in range(n):
+  swapped = False
+  for j in range(0, n - i - 1): 
+   if arr[j] > arr[j + 1]:
+    arr[j], arr[j + 1] = arr[j + 1], arr[j]
+   swapped = True
+  if not swapped:
+   break
+ return arr
+print(bubble_sort([29,13,22,37,52,49,46,71,56]))
+
+# 5 tri rapide
+
+def quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[0]
+    less = [x for x in arr[1:] if x <= pivot]
+    greater = [x for x in arr[1:] if x > pivot]
+    return quick_sort(less) + [pivot] + quick_sort(greater)
+
+
+print(quick_sort([29,13,22,37,52,49,46,71,56]))  
+
+# 4 tri par fusion
+
+def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+
+    return merge(left, right)
+
+def merge(left, right):
+    result = []
+    i = j = 0
+
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
+
+print(merge_sort([29,13,22,37,52,49,46,71,56]))  
