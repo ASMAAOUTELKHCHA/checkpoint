@@ -1,1 +1,88 @@
+import tkinter as tk
+from tkinter import messagebox
+import json
 
+
+with open(r"C:\Users\DELL\Downloads\question.json", "r", encoding="utf-8") as file:
+    questions = json.load(file)
+
+class QuizApp:
+    def __init__(self, app):
+        self.master = app
+        self.master.title("Quiz App")
+        self.master.geometry("5500x500")
+
+     
+        self.score = 0
+        self.current_question = 0
+        self.selected_option = tk.StringVar()
+
+     
+        self.name_label = tk.Label(self.master, text="Entrer votre Nom :", font=("Arial", 12))
+        self.name_label.pack(pady=10)
+
+        self.name_entry = tk.Entry(self.master, font=("Arial", 12))
+        self.name_entry.pack(pady=5)
+
+       
+        self.start_button = tk.Button(self.master, text="Start Quiz", font=("Arial", 12), command=self.start_quiz)
+        self.start_button.pack(pady=20)
+
+
+    def start_quiz(self):
+        self.user_name = self.name_entry.get().strip()  
+        if not self.user_name:
+            messagebox.showwarning("Attention", "Veuillez entrer votre nom !")
+            return
+
+   
+        self.name_label.destroy()
+        self.name_entry.destroy()
+        self.start_button.destroy()
+
+        self.create_widgets()
+        self.display_question()
+
+   
+    def create_widgets(self):
+       
+        self.question_label = tk.Label(self.master, text="", wraplength=400, font=("Arial", 14))
+        self.question_label.pack(pady=20)
+
+        
+        self.option_buttons = []
+        for i in range(4):
+            rb = tk.Radiobutton(self.master, text="", variable=self.selected_option, value="", font=("Arial", 12))
+            rb.pack(anchor="w", padx=50, pady=5)
+            self.option_buttons.append(rb)
+
+       
+        self.next_button = tk.Button(self.master, text="Suivant", command=self.next_question, font=("Arial", 12))
+        self.next_button.pack(pady=20)
+
+    def display_question(self):
+        q = questions[self.current_question]
+        self.question_label.config(text=q["question"])
+        self.selected_option.set(None)  # Reset selected option
+        for i, option in enumerate(q["options"]):
+            self.option_buttons[i].config(text=option, value=option)
+
+    def next_question(self):
+        # Vérifier la réponse
+        if self.selected_option.get() == "":
+            messagebox.showwarning("Attention", "Veuillez sélectionner une réponse !")
+            return
+        if self.selected_option.get() == questions[self.current_question]["answer"]:
+            self.score += 1
+
+        self.current_question += 1
+        if self.current_question < len(questions):
+            self.display_question()
+        else:
+            messagebox.showinfo("Résultat", f"Quiz terminé !\nVotre score : {self.score}/{len(questions)}")
+            self.master.destroy()
+
+
+root = tk.Tk()
+app = QuizApp(root)
+root.mainloop()
